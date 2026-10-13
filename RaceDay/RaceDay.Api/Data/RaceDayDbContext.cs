@@ -27,28 +27,55 @@ public class RaceDayDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // ---------- Users ----------
+        // ============================================================
+        // Primary keys (explicit — names don't match EF conventions)
+        // ============================================================
+        modelBuilder.Entity<AppUser>()
+            .HasKey(u => u.UserId);
+
+        modelBuilder.Entity<Event>()
+            .HasKey(e => e.EventId);
+
+        modelBuilder.Entity<Category>()
+            .HasKey(c => c.CategoryId);
+
+        modelBuilder.Entity<Enrolment>()
+            .HasKey(en => en.EnrolId);
+
+        modelBuilder.Entity<Result>()
+            .HasKey(r => r.ResultId);
+
+        modelBuilder.Entity<EventRoute>()
+            .HasKey(r => r.RouteId);
+
+        // ============================================================
+        // Users
+        // ============================================================
         modelBuilder.Entity<AppUser>()
             .HasIndex(u => u.Email)
             .IsUnique();
 
-        // ---------- Events ----------
+        // ============================================================
+        // Events
+        // ============================================================
         modelBuilder.Entity<Event>()
             .HasOne(e => e.Organizer)
             .WithMany(u => u.OrganizedEvents)
             .HasForeignKey(e => e.OrganizerId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // ---------- Categories ----------
+        // ============================================================
+        // Categories
+        // ============================================================
         modelBuilder.Entity<Category>()
             .HasOne(c => c.Event)
             .WithMany(e => e.Categories)
             .HasForeignKey(c => c.EventId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // ---------- Enrolments ----------
-        // Avoid multiple cascade paths by using NoAction on the FKs that
-        // could otherwise create cycles.
+        // ============================================================
+        // Enrolments
+        // ============================================================
         modelBuilder.Entity<Enrolment>()
             .HasOne(en => en.User)
             .WithMany(u => u.Enrolments)
@@ -67,20 +94,22 @@ public class RaceDayDbContext : DbContext
             .HasForeignKey(en => en.CategoryId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        // A participant can only enrol once per event
         modelBuilder.Entity<Enrolment>()
             .HasIndex(en => new { en.UserId, en.EventId })
             .IsUnique();
 
-        // ---------- Results ----------
-        // Result links ONLY to Enrolment (1:1) — feedback fix
+        // ============================================================
+        // Results (links to Enrolment only — feedback fix)
+        // ============================================================
         modelBuilder.Entity<Result>()
             .HasOne(r => r.Enrolment)
             .WithOne(en => en.Result)
             .HasForeignKey<Result>(r => r.EnrolId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // ---------- EventRoutes ----------
+        // ============================================================
+        // EventRoutes
+        // ============================================================
         modelBuilder.Entity<EventRoute>()
             .HasOne(r => r.Event)
             .WithMany(e => e.Routes)
