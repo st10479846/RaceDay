@@ -26,12 +26,24 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // ============================================================
-// 3. Build the app
+// 3. Session support (feedback fix: session-based auth)
+// ============================================================
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = ".RaceDay.Session";
+});
+
+// ============================================================
+// 4. Build the app
 // ============================================================
 var app = builder.Build();
 
 // ============================================================
-// 4. Configure the HTTP request pipeline
+// 5. Configure the HTTP request pipeline
 // ============================================================
 if (app.Environment.IsDevelopment())
 {
@@ -40,6 +52,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSession();      // <-- MUST come before MapControllers
+
 app.UseAuthorization();
 app.MapControllers();
 
