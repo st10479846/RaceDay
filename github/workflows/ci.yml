@@ -1,0 +1,34 @@
+name: Part 1 Docs Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Docs folder exists
+        run: test -d docs
+
+      - name: ERD exists
+        run: test -f docs/RaceDay_ERD.jpg -o -f docs/RaceDay_ERD.pdf
+
+      - name: API Endpoint Plan exists
+        run: test -f "docs/API Endpoint Plan ST10479846.pdf"
+
+      - name: SQL script exists
+        run: test -f docs/RaceDay_Database.sql
+
+      - name: SQL contains required tables
+        run: |
+          grep -qi "CREATE TABLE Users" docs/RaceDay_Database.sql
+          grep -qi "CREATE TABLE Events" docs/RaceDay_Database.sql
+          grep -qi "CREATE TABLE Results" docs/RaceDay_Database.sql
+
+      - name: README exists
+        run: test -f README.md
