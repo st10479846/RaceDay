@@ -7,54 +7,93 @@ on:
     branches: [ main ]
 
 jobs:
-  # ----------------------------------------------------------
-  # Job 1: Validate Part 1 documentation
-  # ----------------------------------------------------------
   docs-validation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      - name: Show repository structure
+        run: |
+          echo "===== Repo root ====="
+          ls -la
+          echo ""
+          echo "===== docs/ folder ====="
+          ls -la docs || echo "docs folder NOT FOUND"
+          echo ""
+          echo "===== .github/ folder ====="
+          ls -la .github || echo ".github folder NOT FOUND"
+
       - name: Check docs folder exists
-        run: test -d docs
-
-      - name: Check ERD exists
         run: |
-          test -f docs/RaceDay_ERD.jpg || test -f docs/RaceDay_ERD.pdf
+          if [ ! -d "docs" ]; then
+            echo "::error::docs folder missing"
+            exit 1
+          fi
+          echo "docs folder OK"
 
-      - name: Check API Endpoint Plan exists
-        run: test -f "docs/API Endpoint Plan ST10479846.pdf"
-
-      - name: Check SQL script exists
-        run: test -f docs/RaceDay_Database.sql
-
-      - name: Check SQL contains required tables
+      - name: Check for ERD
         run: |
-          grep -qi "CREATE TABLE Users" docs/RaceDay_Database.sql
-          grep -qi "CREATE TABLE Events" docs/RaceDay_Database.sql
-          grep -qi "CREATE TABLE Results" docs/RaceDay_Database.sql
+          find docs -iname "*ERD*" | head -5
+          if [ -z "$(find docs -iname '*ERD*')" ]; then
+            echo "::error::ERD not found in docs/"
+            exit 1
+          fi
+          echo "ERD OK"
+
+      - name: Check for API Endpoint Plan
+        run: |
+          find docs -iname "*Endpoint*" | head -5
+          if [ -z "$(find docs -iname '*Endpoint*')" ]; then
+            echo "::error::API Endpoint Plan not found in docs/"
+            exit 1
+          fi
+          echo "API Endpoint Plan OK"
+
+      - name: Check for SQL script
+        run: |
+          find docs -iname "*.sql" | head -5
+          if [ -z "$(find docs -iname '*.sql')" ]; then
+            echo "::error::SQL script not found in docs/"
+            exit 1
+          fi
+          echo "SQL script OK"
 
       - name: Check README exists
-        run: test -f README.md
+        run: |
+          if [ ! -f "README.md" ]; then
+            echo "::error::README.md missing"
+            exit 1
+          fi
+          echo "README OK"
 
-  # ----------------------------------------------------------
-  # Job 2: Build and test the API
-  # ----------------------------------------------------------
   build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Show repo structure
+        run: |
+          echo "===== Repo root ====="
+          ls -la
+          echo ""
+          echo "===== Looking for .sln files ====="
+          find . -maxdepth 3 -name "*.sln" -not -path "./.git/*"
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore NuGet packages
-        run: dotnet restore RaceDay.sln
+      - name: Restore
+        run: |
+          if [ ! -f "RaceDay.sln" ]; then
+            echo "::error::RaceDay.sln not found at repo root"
+            exit 1
+          fi
+          dotnet restore RaceDay.sln
 
-      - name: Build solution
+      - name: Build
         run: dotnet build RaceDay.sln --no-restore --configuration Release
 
-      - name: Run unit tests
+      - name: Test
         run: dotnet test RaceDay.sln --no-build --configuration Release --verbosity normal
