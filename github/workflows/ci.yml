@@ -1,4 +1,4 @@
-name: Part 1 Docs Validation
+name: RaceDay CI
 
 on:
   push:
@@ -7,28 +7,54 @@ on:
     branches: [ main ]
 
 jobs:
-  validate-docs:
+  # ----------------------------------------------------------
+  # Job 1: Validate Part 1 documentation
+  # ----------------------------------------------------------
+  docs-validation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Docs folder exists
+      - name: Check docs folder exists
         run: test -d docs
 
-      - name: ERD exists
-        run: test -f docs/RaceDay_ERD.jpg -o -f docs/RaceDay_ERD.pdf
+      - name: Check ERD exists
+        run: |
+          test -f docs/RaceDay_ERD.jpg || test -f docs/RaceDay_ERD.pdf
 
-      - name: API Endpoint Plan exists
+      - name: Check API Endpoint Plan exists
         run: test -f "docs/API Endpoint Plan ST10479846.pdf"
 
-      - name: SQL script exists
+      - name: Check SQL script exists
         run: test -f docs/RaceDay_Database.sql
 
-      - name: SQL contains required tables
+      - name: Check SQL contains required tables
         run: |
           grep -qi "CREATE TABLE Users" docs/RaceDay_Database.sql
           grep -qi "CREATE TABLE Events" docs/RaceDay_Database.sql
           grep -qi "CREATE TABLE Results" docs/RaceDay_Database.sql
 
-      - name: README exists
+      - name: Check README exists
         run: test -f README.md
+
+  # ----------------------------------------------------------
+  # Job 2: Build and test the API
+  # ----------------------------------------------------------
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore NuGet packages
+        run: dotnet restore RaceDay.sln
+
+      - name: Build solution
+        run: dotnet build RaceDay.sln --no-restore --configuration Release
+
+      - name: Run unit tests
+        run: dotnet test RaceDay.sln --no-build --configuration Release --verbosity normal
