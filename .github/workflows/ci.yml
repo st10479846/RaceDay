@@ -18,53 +18,28 @@ jobs:
           ls -la
           echo ""
           echo "===== docs/ folder ====="
-          ls -la docs || echo "docs folder NOT FOUND"
-          echo ""
-          echo "===== .github/ folder ====="
-          ls -la .github || echo ".github folder NOT FOUND"
+          ls -la docs
 
       - name: Check docs folder exists
-        run: |
-          if [ ! -d "docs" ]; then
-            echo "::error::docs folder missing"
-            exit 1
-          fi
-          echo "docs folder OK"
+        run: test -d docs
 
       - name: Check for ERD
         run: |
           find docs -iname "*ERD*" | head -5
-          if [ -z "$(find docs -iname '*ERD*')" ]; then
-            echo "::error::ERD not found in docs/"
-            exit 1
-          fi
-          echo "ERD OK"
+          test -n "$(find docs -iname '*ERD*')"
 
       - name: Check for API Endpoint Plan
         run: |
           find docs -iname "*Endpoint*" | head -5
-          if [ -z "$(find docs -iname '*Endpoint*')" ]; then
-            echo "::error::API Endpoint Plan not found in docs/"
-            exit 1
-          fi
-          echo "API Endpoint Plan OK"
+          test -n "$(find docs -iname '*Endpoint*')"
 
       - name: Check for SQL script
         run: |
           find docs -iname "*.sql" | head -5
-          if [ -z "$(find docs -iname '*.sql')" ]; then
-            echo "::error::SQL script not found in docs/"
-            exit 1
-          fi
-          echo "SQL script OK"
+          test -n "$(find docs -iname '*.sql')"
 
       - name: Check README exists
-        run: |
-          if [ ! -f "README.md" ]; then
-            echo "::error::README.md missing"
-            exit 1
-          fi
-          echo "README OK"
+        run: test -f README.md
 
   build-and-test:
     runs-on: ubuntu-latest
@@ -76,8 +51,8 @@ jobs:
           echo "===== Repo root ====="
           ls -la
           echo ""
-          echo "===== Looking for .sln files ====="
-          find . -maxdepth 3 -name "*.sln" -not -path "./.git/*"
+          echo "===== RaceDay/ folder ====="
+          ls -la RaceDay
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
@@ -85,15 +60,10 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore
-        run: |
-          if [ ! -f "RaceDay.sln" ]; then
-            echo "::error::RaceDay.sln not found at repo root"
-            exit 1
-          fi
-          dotnet restore RaceDay.sln
+        run: dotnet restore RaceDay/RaceDay.slnx
 
       - name: Build
-        run: dotnet build RaceDay.sln --no-restore --configuration Release
+        run: dotnet build RaceDay/RaceDay.slnx --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test RaceDay.sln --no-build --configuration Release --verbosity normal
+        run: dotnet test RaceDay/RaceDay.slnx --no-build --configuration Release --verbosity normal
