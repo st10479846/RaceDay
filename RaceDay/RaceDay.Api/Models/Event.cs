@@ -23,7 +23,7 @@ public class Event
     // REQUIRED (feedback fix): Road / Trail / Cycling etc.
     public string EventType { get; set; } = "Road";
 
-    public string Status { get; set; } = "Draft";
+    public string Status { get; set; } = "Draft";   // ✅ correct
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

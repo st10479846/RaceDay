@@ -39,7 +39,7 @@ public record UpdateProfileRequest(
 // ============================================================
 public record CreateEventRequest(
     string Title,
-    string Description,
+    string? Description,        // ← nullable
     DateTime StartDate,
     DateTime EndDate,
     string Location,
@@ -48,7 +48,7 @@ public record CreateEventRequest(
 
 public record UpdateEventRequest(
     string Title,
-    string Description,
+    string? Description,        // ← nullable
     DateTime StartDate,
     DateTime EndDate,
     string Location,
@@ -59,7 +59,7 @@ public record UpdateEventRequest(
 public record EventDto(
     int EventId,
     string Title,
-    string Description,
+    string? Description,        // ← nullable
     DateTime StartDate,
     DateTime EndDate,
     string Location,
