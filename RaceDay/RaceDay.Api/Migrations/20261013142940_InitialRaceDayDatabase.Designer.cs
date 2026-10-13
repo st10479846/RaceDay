@@ -12,7 +12,7 @@ using RaceDay.Api.Data;
 namespace RaceDay.Api.Migrations
 {
     [DbContext(typeof(RaceDayDbContext))]
-    [Migration("20261013140834_InitialRaceDayDatabase")]
+    [Migration("20261013142940_InitialRaceDayDatabase")]
     partial class InitialRaceDayDatabase
     {
         /// <inheritdoc />
@@ -84,10 +84,12 @@ namespace RaceDay.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("DistanceKm")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<decimal>("EntryFee")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
@@ -169,7 +171,8 @@ namespace RaceDay.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("DistanceKm")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
@@ -215,7 +218,8 @@ namespace RaceDay.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("DistanceKm")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<string>("EndPoint")
                         .IsRequired()

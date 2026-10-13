@@ -28,6 +28,28 @@ public class RaceDayDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // ============================================================
+        // Decimal precision (fixes "No store type" warning)
+        // ============================================================
+        modelBuilder.Entity<Event>()
+            .Property(e => e.DistanceKm)
+            .HasPrecision(6, 2);
+
+        modelBuilder.Entity<Category>()
+            .Property(c => c.DistanceKm)
+            .HasPrecision(6, 2);
+
+        modelBuilder.Entity<Category>()
+            .Property(c => c.EntryFee)
+            .HasPrecision(10, 2);
+
+        modelBuilder.Entity<EventRoute>()
+            .Property(r => r.DistanceKm)
+            .HasPrecision(6, 2);
+
+
+
+
+        // ============================================================
         // Primary keys (explicit — names don't match EF conventions)
         // ============================================================
         modelBuilder.Entity<AppUser>()
@@ -115,5 +137,9 @@ public class RaceDayDbContext : DbContext
             .WithMany(e => e.Routes)
             .HasForeignKey(r => r.EventId)
             .OnDelete(DeleteBehavior.Cascade);
+
+
+
+
     }
 }

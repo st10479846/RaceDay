@@ -43,7 +43,7 @@ namespace RaceDay.Api.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DistanceKm = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DistanceKm = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: false),
                     EventType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -68,8 +68,8 @@ namespace RaceDay.Api.Migrations
                     EventId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DistanceKm = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    EntryFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DistanceKm = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: false),
+                    EntryFee = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
                     StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     MaxParticipants = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -95,7 +95,7 @@ namespace RaceDay.Api.Migrations
                     RouteName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartPoint = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EndPoint = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DistanceKm = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DistanceKm = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: false),
                     AltitudeGain = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

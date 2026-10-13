@@ -81,10 +81,12 @@ namespace RaceDay.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("DistanceKm")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<decimal>("EntryFee")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
@@ -166,7 +168,8 @@ namespace RaceDay.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("DistanceKm")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
@@ -212,7 +215,8 @@ namespace RaceDay.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("DistanceKm")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<string>("EndPoint")
                         .IsRequired()
