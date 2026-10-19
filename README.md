@@ -369,7 +369,7 @@ The repository contains 20+ meaningful commits across Parts 1 and 2, covering:
 ## Video Presentation
 
 - **Part 1 video (unlisted):** https://youtu.be/09Jxw9ozpZ0
-- **Part 2 video (unlisted):** https://youtu.be/tKplAneMxYg?si=9aa0BqwW7eA1vFyL
+- **Part 2 video (unlisted):**https://www.youtube.com/watch?v=xCwfMfFu2tc
 
 The Part 2 video should demonstrate:
 
