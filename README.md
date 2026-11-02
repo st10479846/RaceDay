@@ -1252,4 +1252,101 @@ The Part 2 video should demonstrate:
 **Database:** Microsoft SQL Server
 
 
+Part 3 – MVC Web Application, Azure & Docker
+
+
+The RaceDay.Mvc project acts as the frontend. It consumes the Part 2 API and does not connect directly to SQL Server.
+
+Azure Blob Storage Setup
+To use the image upload feature, you must provide an Azure Storage Connection String.
+
+Create an Azure Storage Account and enable "Allow Blob anonymous access".
+
+In Visual Studio, right-click RaceDay.Api -> Manage User Secrets.
+
+Add your connection string:
+
+json
+{
+  "AzureBlobStorage:ConnectionString": "YOUR_AZURE_CONNECTION_STRING_HERE"
+}
+How to Run Locally (Visual Studio)
+Set Multiple Startup Projects (Right-click Solution -> Configure Startup Projects).
+
+Set RaceDay.Api and RaceDay.Mvc to Start.
+
+Press F5.
+
+Docker Setup & Run
+The MVC application is fully containerized.
+
+1. Build the API (must be running on port 5000):
+
+bash
+dotnet run --project .\RaceDay\RaceDay.Api\RaceDay.Api.csproj --urls http://0.0.0.0:5000
+2. Build the Docker Image:
+(Open a new terminal in the solution root)
+
+bash
+docker build -f RaceDay/RaceDay.Mvc/Dockerfile -t raceday-mvc:part3 .
+3. Run the Container:
+
+bash
+docker run -d -p 8080:8080 -e ApiSettings__BaseUrl=http://host.docker.internal:5000/ -e AzureBlobStorage__ConnectionString="YOUR_AZURE_CONNECTION_STRING_HERE" --name raceday-mvc-container raceday-mvc:part3
+4. View the App:
+Open your browser and go to http://localhost:8080.
+
+Authentication and Authorisation
+RaceDay uses server-side sessions as required by the project brief.
+
+Registration hashes the password using SHA-256 with a salt and stores the hash rather than the plain-text password.
+
+Login verifies the password hash and stores UserId, Role, and FullName in the session.
+
+Session cookie name: .RaceDay.Session.
+
+A global RequireLoginAttribute filter rejects unauthenticated requests with 401 Unauthorized.
+
+Testing
+Tests are located in RaceDay.Api.Tests and use an in-memory database through CustomWebApplicationFactory. Scenarios covered include valid registration, incorrect passwords, role enforcement (403 Forbidden), and duplicate enrolments (409 Conflict).
+
+CI/CD
+The GitHub Actions workflow is located at .github/workflows/ci.yml. On each push, it validates the /docs folder, builds the solution, and runs the unit tests.
+
+CI build screenshot
+https://docs/ci-screenshot.png
+
+Video Presentation
+Part 1 video (unlisted): https://youtu.be/09Jxw9ozpZ0
+
+Part 2 video (unlisted): https://youtu.be/xCwfMfFu2tc
+
+Part 3 video (unlisted): [INSERT YOUR PART 3 YOUTUBE LINK HERE]
+
+Submission Checklist
+☑ /docs contains the ERD, API Endpoint Plan, and SQL script.
+☑ docs/RaceDay_Database.sql runs end-to-end on a clean SSMS instance.
+☑ Authentication is session-based; JWT is not used.
+☑ Green CI build screenshot is present at docs/ci-screenshot.png.
+☑ Repository contains 20+ meaningful commits.
+☑ Part 3: MVC app successfully consumes the API.
+☑ Part 3: Azure Blob Storage successfully uploads images.
+☑ Part 3: MVC app successfully builds and runs inside Docker.
+Project: RaceDay Event Management System
+Student: Eugene Makhukhule (ST10479846)
+Backend: ASP.NET Core Web API on .NET 8
+Frontend: ASP.NET Core MVC on .NET 8
+Database: Microsoft SQL Server
+
+text
+
+### 🚀 Next Steps:
+1. Save this file.
+2. Replace `*[INSERT YOUR PART 3 YOUTUBE LINK HERE]*` with your Part 3 video link once you record it.
+3. Commit and push:
+   ```powershell
+   git add README.md
+   git commit -m "Complete Part 3 README"
+   git push
+
 
