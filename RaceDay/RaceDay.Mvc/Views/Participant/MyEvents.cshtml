@@ -1,0 +1,71 @@
+﻿@model List<RaceDay.Contracts.EnrolmentDto>
+@{
+    ViewData["Title"] = "My Events";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h2 class="fw-bold text-primary">My Enrolments</h2>
+    <a asp-action="Index" class="btn btn-outline-primary">Find More Events</a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Event ID</th>
+                    <th>Category ID</th>
+                    <th>Date Entered</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null || !Model.Any())
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            <h5>You haven't entered any events yet.</h5>
+                            <p>Head over to "Find Events" to join a race!</p>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="align-middle fw-bold">#@item.EventId</td>
+                            <td class="align-middle">#@item.CategoryId</td>
+                            <td class="align-middle">@item.EntryDate.ToString("dd MMM yyyy HH:mm")</td>
+                            <td class="align-middle">
+                                @if (item.Status == "Confirmed")
+                                {
+                                    <span class="badge bg-success">Confirmed</span>
+                                }
+                                else if (item.Status == "Pending")
+                                {
+
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                }
+                                else
+                                {
+
+                                    <span class="badge bg-secondary">@item.Status</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

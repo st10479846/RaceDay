@@ -20,6 +20,7 @@ builder.Services.AddControllers(options =>
 // 2. Register controllers + OpenAPI
 // ============================================================
 builder.Services.AddControllers();
+builder.Services.AddScoped<RaceDay.Api.Services.BlobStorageService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {

@@ -5,9 +5,15 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RaceDay", "RaceDay", "{24F89F57-2B69-9FD1-83CC-55C48DA28110}"
 EndProject
+<<<<<<< Updated upstream
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceDay.Api", "RaceDay\RaceDay.Api\RaceDay.Api.csproj", "{9F57AE9E-BED0-417C-AE71-F9D0432A4518}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceDay.Contracts", "RaceDay\RaceDay.Contracts\RaceDay.Contracts.csproj", "{08808111-23BB-48C6-8EE1-EF297A11C152}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceDay.Api", "RaceDay\RaceDay.Api\RaceDay.Api.csproj", "{204DD986-7201-447C-9411-D1F2FA8DA460}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceDay.Contracts", "RaceDay\RaceDay.Contracts\RaceDay.Contracts.csproj", "{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}"
+>>>>>>> Stashed changes
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +25,7 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+<<<<<<< Updated upstream
 		{9F57AE9E-BED0-417C-AE71-F9D0432A4518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F57AE9E-BED0-417C-AE71-F9D0432A4518}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F57AE9E-BED0-417C-AE71-F9D0432A4518}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -43,12 +50,43 @@ Global
 		{08808111-23BB-48C6-8EE1-EF297A11C152}.Release|x64.Build.0 = Release|Any CPU
 		{08808111-23BB-48C6-8EE1-EF297A11C152}.Release|x86.ActiveCfg = Release|Any CPU
 		{08808111-23BB-48C6-8EE1-EF297A11C152}.Release|x86.Build.0 = Release|Any CPU
+=======
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Debug|x64.Build.0 = Debug|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Debug|x86.Build.0 = Debug|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Release|Any CPU.Build.0 = Release|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Release|x64.ActiveCfg = Release|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Release|x64.Build.0 = Release|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Release|x86.ActiveCfg = Release|Any CPU
+		{204DD986-7201-447C-9411-D1F2FA8DA460}.Release|x86.Build.0 = Release|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Debug|x64.Build.0 = Debug|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Debug|x86.Build.0 = Debug|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Release|x64.ActiveCfg = Release|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Release|x64.Build.0 = Release|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Release|x86.ActiveCfg = Release|Any CPU
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5}.Release|x86.Build.0 = Release|Any CPU
+>>>>>>> Stashed changes
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+<<<<<<< Updated upstream
 		{9F57AE9E-BED0-417C-AE71-F9D0432A4518} = {24F89F57-2B69-9FD1-83CC-55C48DA28110}
 		{08808111-23BB-48C6-8EE1-EF297A11C152} = {24F89F57-2B69-9FD1-83CC-55C48DA28110}
+=======
+		{204DD986-7201-447C-9411-D1F2FA8DA460} = {24F89F57-2B69-9FD1-83CC-55C48DA28110}
+		{95CD0CD3-5591-4A54-88DD-18EDAE4DD7C5} = {24F89F57-2B69-9FD1-83CC-55C48DA28110}
+>>>>>>> Stashed changes
 	EndGlobalSection
 EndGlobal

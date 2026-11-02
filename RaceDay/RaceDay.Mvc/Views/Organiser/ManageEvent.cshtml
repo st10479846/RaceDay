@@ -1,0 +1,175 @@
+﻿@model RaceDay.Mvc.ViewModels.ManageEventVm
+@{
+    ViewData["Title"] = $"Manage: {Model.Event.Title}";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <div>
+        <h2 class="fw-bold mb-0">@Model.Event.Title</h2>
+        <span class="text-muted">@Model.Event.Location | @Model.Event.StartDate.ToString("dd MMM yyyy")</span>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to Dashboard</a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="row">
+    <!-- LEFT COLUMN: BANNER, STATUS & CATEGORIES -->
+    <div class="col-md-4">
+
+        <!-- Banner Image Card -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white">Event Banner</div>
+            <div class="card-body text-center">
+                @if (!string.IsNullOrEmpty(Model.Event.BannerImageUrl))
+                {
+                    <img src="@Model.Event.BannerImageUrl" alt="Event Banner" class="img-fluid rounded mb-3 shadow-sm" />
+                }
+                else
+                {
+                    <p class="text-muted">No banner uploaded yet.</p>
+                }
+
+                <form asp-action="UploadBanner" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                    <div class="input-group">
+                        <input type="file" name="bannerFile" class="form-control" accept="image/*" required />
+                        <button type="submit" class="btn btn-info text-white">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Status Card -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white">Event Status</div>
+            <div class="card-body text-center">
+                <h4 class="mb-3">Current: <span class="badge bg-primary">@Model.Event.Status</span></h4>
+                <form asp-action="UpdateStatus" method="post" class="d-flex gap-2">
+                    <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                    <select name="status" class="form-select">
+                        <option value="Draft">Draft (Hidden)</option>
+                        <option value="Open">Open (Accepting Entries)</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Categories Card -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">Categories</div>
+            <div class="card-body">
+                <ul class="list-group mb-3">
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>@cat.Name</strong><br />
+                                <small>@cat.DistanceKm km - R@(cat.EntryFee)</small>
+                            </div>
+                        </li>
+                    }
+                    @if (!Model.Categories.Any())
+                    {
+                        <li class="list-group-item text-muted">No categories yet.</li>
+                    }
+                </ul>
+
+                <h6>Add Category</h6>
+                <form asp-action="AddCategory" method="post">
+                    <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+
+                    <input type="text" name="name" class="form-control mb-2" placeholder="Name (e.g. 10km)" required />
+                    <input type="number" step="0.1" name="distanceKm" class="form-control mb-2" placeholder="Distance (km)" required />
+                    <input type="number" step="0.01" name="entryFee" class="form-control mb-2" placeholder="Entry Fee" required />
+                    <input type="time" name="startTime" class="form-control mb-2" required />
+
+                    <button type="submit" class="btn btn-sm btn-success w-100">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT COLUMN: ENROLMENTS & RESULTS -->
+    <div class="col-md-8">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <span>Enrolments & Results</span>
+                <span class="badge bg-light text-dark">@Model.Enrolments.Count Total</span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Participant ID</th>
+                            <th>Status</th>
+                            <th>Action / Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Enrolments.Any())
+                        {
+                            <tr><td colspan="3" class="text-center py-4 text-muted">No one has enrolled yet.</td></tr>
+                        }
+                        @foreach (var enr in Model.Enrolments)
+                        {
+                            <tr>
+                                <td class="align-middle">
+                                    User #@enr.UserId<br />
+                                    <small class="text-muted">Bib: @(enr.BibNumber ?? "None")</small>
+                                </td>
+                                <td class="align-middle">
+                                    @if (enr.Status == "Confirmed")
+                                    {
+                                        <span class="badge bg-success">Confirmed</span>
+                                    }
+                                    else if (enr.Status == "Pending")
+                                    {
+
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="badge bg-secondary">@enr.Status</span>
+                                    }
+                                </td>
+                                <td class="align-middle">
+                                    @if (enr.Status == "Pending")
+                                    {
+                                        <form asp-action="ApproveEnrolment" method="post">
+                                            <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                            <input type="hidden" name="enrolId" value="@enr.EnrolId" />
+                                            <button type="submit" class="btn btn-sm btn-outline-success">Confirm Entry</button>
+                                        </form>
+                                    }
+                                    else if (enr.Status == "Confirmed" || enr.Status == "Completed")
+                                    {
+                                        <form asp-action="CaptureResult" method="post" class="d-flex gap-1 align-items-center">
+                                            <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                            <input type="hidden" name="EnrolId" value="@enr.EnrolId" />
+                                            <input type="text" name="FinishTime" class="form-control form-control-sm" placeholder="Time (HH:mm:ss)" required style="width: 130px;" />
+                                            <input type="number" name="Position" class="form-control form-control-sm" placeholder="Pos (e.g. 1)" required style="width: 80px;" />
+                                            <input type="text" name="AgeCategory" class="form-control form-control-sm" placeholder="Age Group" style="width: 90px;" />
+                                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,6 +11,9 @@ public class Event
 
     public string? Description { get; set; }
 
+    // this is the new property added to the Event model to store the URL of the banner image
+    public string? BannerImageUrl { get; set; }
+
     public DateTime StartDate { get; set; }
 
     public DateTime EndDate { get; set; }

@@ -59,14 +59,16 @@ public record UpdateEventRequest(
 public record EventDto(
     int EventId,
     string Title,
-    string? Description,        // ← nullable
+    string? Description,
     DateTime StartDate,
     DateTime EndDate,
     string Location,
     decimal DistanceKm,
     string EventType,
     string Status,
-    int OrganizerId);
+    int OrganizerId,
+    string? BannerImageUrl // <-- ADD THIS is new
+);
 
 // ============================================================
 // Category DTOs

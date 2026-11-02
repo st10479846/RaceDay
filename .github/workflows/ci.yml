@@ -12,31 +12,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Show repository structure
+      - name: Show repo structure
         run: |
-          echo "===== Repo root ====="
-          ls -la
-          echo ""
-          echo "===== docs/ folder ====="
-          ls -la docs
+          echo "=== Root ==="; ls -la
+          echo "=== docs ==="; ls -la docs
 
       - name: Check docs folder exists
         run: test -d docs
 
-      - name: Check for ERD
-        run: |
-          find docs -iname "*ERD*" | head -5
-          test -n "$(find docs -iname '*ERD*')"
+      - name: Check ERD exists
+        run: test -n "$(find docs -iname '*ERD*')"
 
-      - name: Check for API Endpoint Plan
-        run: |
-          find docs -iname "*Endpoint*" | head -5
-          test -n "$(find docs -iname '*Endpoint*')"
+      - name: Check API Endpoint Plan exists
+        run: test -n "$(find docs -iname '*Endpoint*')"
 
-      - name: Check for SQL script
+      - name: Check SQL script exists
+        run: test -f docs/RaceDay_Database.sql
+
+      - name: Check SQL contains required tables
         run: |
-          find docs -iname "*.sql" | head -5
-          test -n "$(find docs -iname '*.sql')"
+          grep -qi "CREATE TABLE Users" docs/RaceDay_Database.sql
+          grep -qi "CREATE TABLE Events" docs/RaceDay_Database.sql
+          grep -qi "CREATE TABLE Results" docs/RaceDay_Database.sql
 
       - name: Check README exists
         run: test -f README.md
@@ -47,12 +44,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Show repo structure
-        run: |
-          echo "===== Repo root ====="
-          ls -la
-          echo ""
-          echo "===== RaceDay/ folder ====="
-          ls -la RaceDay
+        run: ls -la
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
@@ -60,10 +52,10 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore
-        run: dotnet restore RaceDay/RaceDay.slnx
+        run: dotnet restore RaceDay.sln
 
       - name: Build
-        run: dotnet build RaceDay/RaceDay.slnx --no-restore --configuration Release
+        run: dotnet build RaceDay.sln --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test RaceDay/RaceDay.slnx --no-build --configuration Release --verbosity normal
+        run: dotnet test RaceDay.sln --no-build --configuration Release

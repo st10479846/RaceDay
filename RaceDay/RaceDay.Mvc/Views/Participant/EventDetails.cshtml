@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Event Details";
+    var ev = ViewBag.Event as RaceDay.Contracts.EventDto;
+    var categories = ViewBag.Categories as List<RaceDay.Contracts.CategoryDto>;
+}
+
+<div class="row mb-5 mt-3">
+    <div class="col-12">
+        <a asp-action="Index" class="btn btn-sm btn-outline-secondary mb-3">&larr; Back to Events</a>
+
+        <div class="card shadow-sm border-0 border-top border-primary border-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h2 class="fw-bold text-primary mb-1">@ev?.Title</h2>
+                        <h5 class="text-muted">📍 @ev?.Location | 📅 @ev?.StartDate.ToString("dd MMM yyyy")</h5>
+                    </div>
+                    <span class="badge bg-success fs-6">@ev.EventType</span>
+                </div>
+
+                <hr />
+                <p class="lead">@ev.Description</p>
+                <p class="mb-0"><strong>Total Distance:</strong> @ev.DistanceKm km</p>
+            </div>
+        </div>
+    </div>
+</div>x
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h4 class="mb-3">Select a Category to Enter</h4>
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+
+        @if (categories == null || !categories.Any())
+        {
+            <div class="alert alert-warning">No categories have been set up for this event yet. Check back later!</div>
+        }
+        else
+        {
+            <div class="list-group shadow-sm">
+                @foreach (var cat in categories)
+                {
+                    <div class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <div>
+                            <h5 class="mb-1 fw-bold">@cat.Name</h5>
+                            <span class="text-muted">@cat.DistanceKm km - R@(cat.EntryFee)</span><br />
+                            <small class="text-muted">Starts at @cat.StartTime.ToString("HH:mm")</small>
+                        </div>
+                        <form asp-action="Enrol" method="post">
+                            <input type="hidden" name="eventId" value="@ev.EventId" />
+                            <input type="hidden" name="categoryId" value="@cat.CategoryId" />
+                            <button type="submit" class="btn btn-success btn-lg">Enter Event</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

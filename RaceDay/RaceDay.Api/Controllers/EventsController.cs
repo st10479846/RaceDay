@@ -179,18 +179,41 @@ public class EventsController : ControllerBase
         return NoContent();
     }
 
+    // This is the new line added to the EventsController to handle banner image uploads
+
+    [HttpPost("{id:int}/banner")]
+    public async Task<IActionResult> UploadBanner(int id, IFormFile file, [FromServices] RaceDay.Api.Services.BlobStorageService blobStorage)
+    {
+        if (HttpContext.Session.GetRole() != Roles.Organiser)
+            return StatusCode(403, new { error = "Only organisers can upload banners." });
+
+        var userId = HttpContext.Session.GetUserId()!.Value;
+        var ev = await _db.Events.FindAsync(id);
+
+        if (ev == null) return NotFound();
+        if (ev.OrganizerId != userId) return StatusCode(403, new { error = "Not your event." });
+
+        string url = await blobStorage.UploadAsync(file, "event-banners");
+        ev.BannerImageUrl = url;
+        await _db.SaveChangesAsync();
+
+        return Ok(new { imageUrl = url });
+    }
+
+
     // ============================================================
     // Helper — maps Event entity → EventDto
     // ============================================================
     private static EventDto ToDto(Event e) => new(
-        e.EventId,
-        e.Title,
-        e.Description ?? string.Empty,
-        e.StartDate,
-        e.EndDate,
-        e.Location,
-        e.DistanceKm,
-        e.EventType,
-        e.Status,
-        e.OrganizerId);
+     e.EventId,
+     e.Title,
+     e.Description ?? string.Empty,
+     e.StartDate,
+     e.EndDate,
+     e.Location,
+     e.DistanceKm,
+     e.EventType,
+     e.Status,
+     e.OrganizerId,
+     e.BannerImageUrl); // <-- ADD THIS is the new line added
 }
